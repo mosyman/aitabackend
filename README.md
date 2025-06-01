@@ -8,9 +8,9 @@
 ## 技术栈
 
 ```
-- **框架**: Flask
-- **数据库**: MySQL
-- **容器化**: Docker
+- 框架: Flask
+- 数据库: MySQL
+- 容器化: Docker
 ```
 
 
