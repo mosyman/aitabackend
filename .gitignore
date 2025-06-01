@@ -1,0 +1,17 @@
+# 忽略环境文件
+.env
+.venv
+env/
+venv/
+ENV/
+
+# 测试文件
+test/
+
+# 临时文件
+temp.txt
+
+# PyCharm
+.idea/
+*.iml
+__pycache__/

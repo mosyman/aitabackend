@@ -1,0 +1,49 @@
+version: '3'
+services:
+#  mysql:
+#    image: mysql:5.7
+#    container_name: mysql
+#    volumes:
+#      - /data/mysql/data:/var/lib/mysql
+#      - /data/mysql/conf/my.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+#    restart: always
+#    ports:
+#      - 4306:3306
+#    environment:
+#      MYSQL_ROOT_PASSWORD: Chl2002Hoa
+#      TZ: Asia/Shanghai
+#    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  flask:
+    build:
+      context: ../sql
+      dockerfile: Dockerfile
+    container_name: flask
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: Chl2002Hoa
+      DB_NAME: aitaSystem
+      TZ: Asia/Shanghai
+#    depends_on:
+#      - mysql
+
+
+
+#docker run -d \
+#  --name flask \
+#  --network mysql_default \
+#  -p 5000:5000 \
+#  -e DB_HOST=mysql \
+#  -e DB_PORT=3306 \
+#  -e DB_USER=root \
+#  -e DB_PASSWORD=Chl2002Hoa \
+#  -e DB_NAME=aitaSystem \
+#  -e TZ=Asia/Shanghai \
+#  aitasystembackend-flask
+
+
