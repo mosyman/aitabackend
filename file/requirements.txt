@@ -1,3 +1,4 @@
+# 后端环境依赖 python3.6.13 pip21.2.2
 Faker==14.2.1
 Flask==2.0.3
 Flask-Cors==5.0.0

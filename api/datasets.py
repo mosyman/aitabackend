@@ -17,7 +17,6 @@ def add_dataset():
     image_url = data.get('image_url'),
     type = data.get('type'),
     abstract = data.get('abstract')
-    # 标题，内容，作者，类型不能为空，分别判断
     if not title:
         return restful.params_error(message='标题不能为空')
     if not content:
@@ -45,7 +44,7 @@ def add_dataset():
         return restful.server_error(message='提交失败！')
 
 
-@api_bp.route('/delete', methods=['POST'])
+@api_bp.route('/datasets/delete', methods=['POST'])
 def delete_dataset():
     data = request.json
     if not data or 'id' not in data:
@@ -105,8 +104,8 @@ def get_datasets():
     data = request.get_json() or {}
 
     # 从请求体中获取分页和排序参数，提供默认值
-    page = data.get('page', 1)
-    per_page = data.get('per_page', 10)
+    pageNum = data.get('pageNum', 1)
+    pageSize = data.get('pageSize', 10)
     sort_by = data.get('sort_by', 'createTime')
     order = data.get('order', 'desc')
 
@@ -122,7 +121,7 @@ def get_datasets():
 
     # 分页处理
     try:
-        pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+        pagination = query.paginate(page=pageNum, per_page=pageSize, error_out=False)
     except (TypeError, ValueError):
         return restful.params_error(message='不合理的分页参数')
 
@@ -149,15 +148,22 @@ def get_datasets():
         'items': result,
         'total': pagination.total,
         'pages': pagination.pages,
-        'page': pagination.page,
-        'per_page': pagination.per_page
+        'pageNum': pagination.page,
+        'pageSize': pagination.per_page
     })
 
 
 
 # 获取单个数据集
-@api_bp.route('/datasets/<int:id>', methods=['GET'])
-def get_dataset(id):
+@api_bp.route('/datasets/detail', methods=['GET'])
+def get_dataset():
+    id = request.args.get('id')
+    if not id:
+        return restful.params_error(message='请求头中未提供id')
+    try:
+        id = int(id)
+    except ValueError:
+        return restful.params_error(message='参数类型错误')
     dataset = Dataset.query.filter_by(id=id, isDelete=0).first();
     if not dataset:
         return restful.params_error(message='数据集不存在')

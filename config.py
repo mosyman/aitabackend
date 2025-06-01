@@ -2,11 +2,11 @@ import os
 from datetime import timedelta
 from dotenv import load_dotenv
 
-# 新增：自动加载项目根目录的 .env 文件
+# 自动加载项目根目录的 .env 文件
 load_dotenv()
 
 class Config:
-    # 必须设置，用于session加密
+    # 需要在 项目根目录创建 .env 文件，并填写SECRET_KEY和DB_URL
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DB_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -15,8 +15,9 @@ class Config:
     # PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 
 class DevelopmentConfig(Config):
+    pass
     # 开启 SQL 语句日志（方便调试）
-    SQLALCHEMY_ECHO = True
+    # SQLALCHEMY_ECHO = True
 
 class ProductionConfig(Config):
     pass

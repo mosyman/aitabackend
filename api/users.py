@@ -79,9 +79,6 @@ def login():
 
 @api_bp.route('/user/current', methods=['GET'])
 def get_current_user():
-    print(f"请求头: {request.headers}")  # 查看所有请求头
-    print(f"所有 Cookie: {request.cookies}")  # 查看收到的所有 Cookie
-
     user_id=request.cookies.get('loginUser');
     # 检查用户是否已登录
     if not user_id:
