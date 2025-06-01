@@ -1,4 +1,4 @@
-from flask import request, session, make_response
+from flask import request, make_response
 
 from utils import restful
 from app import db
@@ -56,13 +56,6 @@ def login():
         return restful.params_error(message='密码错误')
 
 
-    # resp=restful.ok(message='登录成功', data={
-    #         'account': user.account,
-    #         'name': user.name,
-    #         'avatar': user.avatar,
-    #         'profile': user.profile,
-    #         'role': user.role
-    #     })
     resp=make_response({
         "code":200,
         "message":"登录成功",
