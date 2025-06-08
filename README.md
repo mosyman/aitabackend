@@ -50,6 +50,13 @@ DB_URL=数据库类型+驱动程序名：//数据库用户名:密码@主机地�
 执行 /file/sql/create.sql脚本
 ```
 
+5. **模型运行**
+```
+下载文件并放到根目录/model/saved_weights/epoch_149.pth
+```
+链接: [模型文件](https://pan.baidu.com/s/1NyICLoQ6yL0aC_az7MEftw) 提取码: x97j 
+
+
 ## 部署
 ```
 暂时未部署上线
