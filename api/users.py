@@ -1,4 +1,5 @@
 from flask import request, make_response
+from flask_login import login_user, logout_user,current_user
 
 from cos.cosClient import cosJoin
 from utils import restful
@@ -56,26 +57,36 @@ def login():
     if user.password != user_password:  # 明文密码比对
         return restful.params_error(message='密码错误')
 
+    # 使用 Flask-Login 登录用户
+    login_user(user)
 
-    resp=make_response({
-        "code":200,
-        "message":"登录成功",
-        "data":{
-            "account": user.account,
-            "name": user.name,
-            "avatar": user.avatar,
-            "profile": user.profile,
-            "role": user.role
-        }
+    return restful.ok(data={
+        "account": user.account,
+        "name": user.name,
+        "avatar": user.avatar,
+        "profile": user.profile,
+        "role": user.role
     })
-    resp.set_cookie(
-        'loginUser',
-        str(user.id),
-        max_age=7 * 24 * 3600,
-        path='/api',
-        httponly=True,  # 允许 JS 获取（调试用）
-    )
-    return resp
+
+    # resp=make_response({
+    #     "code":200,
+    #     "message":"登录成功",
+    #     "data":{
+    #         "account": user.account,
+    #         "name": user.name,
+    #         "avatar": user.avatar,
+    #         "profile": user.profile,
+    #         "role": user.role
+    #     }
+    # })
+    # resp.set_cookie(
+    #     'loginUser',
+    #     str(user.id),
+    #     max_age=7 * 24 * 3600,
+    #     path='/api',
+    #     httponly=True,  # 允许 JS 获取（调试用）
+    # )
+    # return resp
 
 
 
@@ -83,39 +94,65 @@ def login():
 # 注销接口
 @api_bp.route('/user/logout', methods=['GET'])
 def logout():
-    # 清除 Cookie
-    resp = restful.ok(message='退出登录成功')
-    resp.delete_cookie('loginUser')
-    return resp
+    # 使用 Flask-Login 的注销功能
+    logout_user()
+    return restful.ok(message='退出登录成功')
 
 
+# @api_bp.route('/user/logout', methods=['GET'])
+# def logout():
+#     # 清除 Cookie
+#     resp = restful.ok(message='退出登录成功')
+#     resp.delete_cookie('loginUser')
+#     return resp
+
+
+# 获取当前用户接口
 @api_bp.route('/user/current', methods=['GET'])
 def get_current_user():
-    user_id=request.cookies.get('loginUser');
-    # 检查用户是否已登录
-    if not user_id:
+    if not current_user.is_authenticated:
         return restful.unlogin_error(message='用户未登录')
-    # string to bitInt
-    user_id=int(user_id)
 
-    # 查询数据库获取用户信息
-    user = User.query.filter_by(id=user_id, isDelete=0).first()
+    # 检查用户是否被删除
+    if current_user.isDelete != 0:
+        logout_user()  # 强制注销被删除的用户
+        return restful.params_error(message='用户不存在或已被注销')
 
-    # 检查用户是否存在且未被删除
-    if not user:
-        # 用户可能已被删除，清除cookie
-        resp= restful.params_error(message='用户不存在或已被删除')
-        resp.delete_cookie('loginUser')
-        return resp
-
-    # 返回用户信息（不包含敏感字段如密码）
     return restful.ok(data={
-        'account': user.account,
-        'name': user.name,
-        'avatar': user.avatar,
-        'profile': user.profile,
-        'role': user.role,
+        'account': current_user.account,
+        'name': current_user.name,
+        'avatar': current_user.avatar,
+        'profile': current_user.profile,
+        'role': current_user.role,
     })
+
+# @api_bp.route('/user/current', methods=['GET'])
+# def get_current_user():
+#     user_id=request.cookies.get('loginUser');
+#     # 检查用户是否已登录
+#     if not user_id:
+#         return restful.unlogin_error(message='用户未登录')
+#     # string to bitInt
+#     user_id=int(user_id)
+#
+#     # 查询数据库获取用户信息
+#     user = User.query.filter_by(id=user_id, isDelete=0).first()
+#
+#     # 检查用户是否存在且未被删除
+#     if not user:
+#         # 用户可能已被删除，清除cookie
+#         resp= restful.params_error(message='用户不存在或已被删除')
+#         resp.delete_cookie('loginUser')
+#         return resp
+#
+#     # 返回用户信息（不包含敏感字段如密码）
+#     return restful.ok(data={
+#         'account': user.account,
+#         'name': user.name,
+#         'avatar': user.avatar,
+#         'profile': user.profile,
+#         'role': user.role,
+#     })
 
 
 # 添加用户

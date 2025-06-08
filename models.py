@@ -1,7 +1,10 @@
 from datetime import datetime
+
+from flask_login import UserMixin
+
 from app import db
 
-class User(db.Model):
+class User(UserMixin,db.Model):
     __tablename__ = 'user'
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True, comment='id')
     account = db.Column(db.String(256), nullable=False, comment='账号')
