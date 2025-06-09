@@ -14,4 +14,4 @@ def hello_world():  # put application's code here
     return 'AITA系统后台服务'
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=5000,debug=True)
+    app.run(port=5002)

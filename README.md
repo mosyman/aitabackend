@@ -44,6 +44,12 @@ SECRET_KEY=你的密钥
 # 数据库配置（示例为 MySQL，根据实际数据库类型修改）
 DB_URL=数据库类型+驱动程序名：//数据库用户名:密码@主机地址:端口号/连接的数据库名
 
+# 腾讯云COS对象存储（具体看官方文档）
+COS_SECRET_ID=你的secret_id
+COS_SECRET_KEY=你的secret_key
+COS_REGION=你的地域（region）
+COS_SCHEME=https
+COS_BUCKET=你的存储桶名称
 ```
 4. **初始化数据库**
 ```
@@ -59,7 +65,7 @@ DB_URL=数据库类型+驱动程序名：//数据库用户名:密码@主机地�
 
 ## 部署
 ```
-暂时未部署上线
+已上线
 ```
 ## 许可证
 

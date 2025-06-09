@@ -3,9 +3,8 @@ CREATE DATABASE aitaSystem
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
-use aitaSystem;
+use aitasystem;
 
-drop table user;
 
 -- 用户表
 create table if not exists user
